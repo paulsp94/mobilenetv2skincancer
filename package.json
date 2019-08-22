@@ -2,11 +2,15 @@
   "name": "mobilenetv2skincancer",
   "version": "1.0.1",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulsp94/mobilenetv2skincancer"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Paul Spende <paul.spende@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@tensorflow/tfjs-node": "^1.2.7",
