@@ -1,14 +1,44 @@
-import * as tf from '@tensorflow/tfjs-node';
+import { Image, createCanvas } from 'canvas';
+import * as tf from '@tensorflow/tfjs';
 import Jimp from 'jimp';
 
 export default class SkinCancerPrediction {
   constructor() {
-    this.model = await tf.loadLayersModel('../model/model.json');
+    this.model;
     this.classes = ['akiec', 'bcc', 'bkl', 'df', 'mel', 'nv', 'vasc'];
   }
 
-  loadImg(imgURI) {
-    return Jimp.read(imgURI).then(img =>
+  async initialize() {
+    this.model = await tf.loadLayersModel(
+      'https://raw.githubusercontent.com/paulsp94/mobilenetv2skincancer/master/model/model.json'
+    );
+  }
+
+  static async create() {
+    const o = new SkinCancerPrediction();
+    await o.initialize();
+    return o;
+  }
+
+  newLoadImg = async imgURI => {
+    const canvas = createCanvas(224, 224);
+    const ctx = canvas.getContext('2d');
+    try {
+      var img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0);
+      img.onerror = err => {
+        throw err;
+      };
+      img.src = imgURI;
+      const image = tf.browser.fromPixels(canvas).reshape([1, 224, 224, 3]);
+      return image;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  loadImg = async imgURI => {
+    return Jimp.read(imgURI).then(() =>
       tf.tidy(img => {
         img.resize(224, 224);
         const p = [];
@@ -27,13 +57,16 @@ export default class SkinCancerPrediction {
           .reshape([1, img.bitmap.width, img.bitmap.height, 3]);
       })
     );
-  }
+  };
 
-  classify(imgURI) {
-    const img = await loadImg(imgURI);
-    const predictions = this.model.predict(img);
-    const prediction = predictions.reshape([7]).argMax();
+  classify = async imgURI => {
+    const img = await this.newLoadImg(imgURI);
+    const predictions = await this.model.predict(img);
+    const prediction = predictions
+      .reshape([7])
+      .argMax()
+      .dataSync()[0];
     const result = this.classes[prediction];
     return result;
-  }
+  };
 }
