@@ -1,20 +1,21 @@
 {
   "name": "mobilenetv2skincancer",
-  "version": "1.0.6",
+  "version": "1.0.12",
   "description": "",
   "repository": {
     "type": "git",
     "url": "https://github.com/paulsp94/mobilenetv2skincancer"
   },
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "prepare": "node_modules/@babel/cli/bin/babel.js src --out-dir lib"
   },
   "author": "Paul Spende <paul.spende@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "@babel/runtime": "^7.5.5",
     "@tensorflow/tfjs": "^1.2.8",
-    "canvas": "^2.6.0",
+    "@tensorflow/tfjs-node": "^1.2.8",
     "jimp": "^0.6.4"
   },
   "devDependencies": {
@@ -22,7 +23,6 @@
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-transform-runtime": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/runtime": "^7.5.5"
+    "@babel/preset-env": "^7.5.5"
   }
 }
